@@ -23,6 +23,55 @@ Alpha–Beta (𝛼−𝛽) algorithm is actually an improved minimax using a heu
 
 When added to a simple minimax algorithm, it gives the same output but cuts off certain branches that can’t possibly affect the final decision — dramatically improving the performance
 <hr>
+<h1>Minimax Algorithm with Alpha–Beta Pruning</h1>
+
+<hr>
+
+<h2>Program:</h2>
+
+```python
+import math
+
+def minimax(curDepth, nodeIndex, maxTurn, scores, targetDepth, alpha, beta):
+    """
+    Minimax algorithm with Alpha-Beta Pruning
+    """
+    # Base case: target depth reached
+    if curDepth == targetDepth:
+        return scores[nodeIndex]
+
+    if maxTurn:
+        # Maximizing player's turn
+        maxEval = -math.inf
+        for i in range(2):  # Two children for each node
+            eval = minimax(curDepth + 1, nodeIndex * 2 + i, False, scores, targetDepth, alpha, beta)
+            maxEval = max(maxEval, eval)
+            alpha = max(alpha, eval)  # Update alpha
+            if beta <= alpha:
+                break  # Beta pruning
+        return maxEval
+    else:
+        # Minimizing player's turn
+        minEval = math.inf
+        for i in range(2):  # Two children for each node
+            eval = minimax(curDepth + 1, nodeIndex * 2 + i, True, scores, targetDepth, alpha, beta)
+            minEval = min(minEval, eval)
+            beta = min(beta, eval)  # Update beta
+            if beta <= alpha:
+                break  # Alpha pruning
+        return minEval
+
+
+# Example scores (leaf nodes)
+scores = [3, 5, 6, 9, 1, 2, 0, -1]
+targetDepth = 3  # Depth of the tree
+
+# Start minimax from root with initial alpha and beta values
+best_value = minimax(0, 0, True, scores, targetDepth, -math.inf, math.inf)
+
+print("The optimal value is:", best_value)
+```
+<hr>
 <h2>Sample Input and Output:</h2>
 
 ![image](https://github.com/natsaravanan/19AI405FUNDAMENTALSOFARTIFICIALINTELLIGENCE/assets/87870499/8d5e329a-9aff-41a6-bcf0-46efa10e1b92)
